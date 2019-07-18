@@ -59,5 +59,5 @@ Secondly inside ball_chaser package, the process_image node analyzes the image c
 ```
   5. Visualize the robot's camera images
 ```
-  $ $ rosrun rqt_image_view rqt_image_view  
+  $ rosrun rqt_image_view rqt_image_view  
 ```

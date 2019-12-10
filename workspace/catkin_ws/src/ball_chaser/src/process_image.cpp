@@ -39,13 +39,16 @@ void process_image_callback(const sensor_msgs::Image img)
 
     // 1. Loop through each pixel in the image and check if there's a bright white one
 
-    for (int i = 0; i < img.height * img.step; i++)  // size: step * rows(height)
+    for (int i = 0; i < img.height * img.step; i+=3)  // size: step * rows(height) // stp each cell [r,g,b]
     {  
-        if (img.data[i] == white_pixel) {
-            find_whiteball = true;
-	    ball_position =i/3; 
-	    ball_position=ball_position%img.width;
-            break;
+        if (img.data[i] == white_pixel) {   // The first R value is equal to 255
+        if (img.data[i+1] == white_pixel && img.data[i+2] == white_pixel) // Check if G&B values are equal to 255
+        {
+              find_whiteball = true;
+          ball_position =i/3; 
+              ball_position=ball_position%img.width;
+              break;
+        }
         }
     }
 
@@ -58,18 +61,18 @@ void process_image_callback(const sensor_msgs::Image img)
     } 
     else if (ball_position< left_section_end) 
     {
-	ROS_INFO("Left: %i",ball_position);
- 	drive_robot(2.0,2.0);   // ccw direction--> left
+    ROS_INFO("Left: %i",ball_position);
+    drive_robot(1.0,1.5);   // ccw direction--> left
     }
     else if (ball_position> right_section_start)
     {
-	ROS_INFO("Right : %i",ball_position);
- 	drive_robot(2.0,-2.0);  // cw direction --> right 
+    ROS_INFO("Right : %i",ball_position);
+    drive_robot(1.0,-1.5);  // cw direction --> right 
     } 
     else                      // move forward
     {
-	ROS_INFO("Forward");
-	drive_robot(2.0,0.0);
+    ROS_INFO("Forward");
+    drive_robot(1.0,0.0);
     }
 
 
